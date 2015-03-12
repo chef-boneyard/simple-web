@@ -19,5 +19,9 @@ describe 'simple-web::default' do
       chef_run # This should not raise an error
     end
 
+   it 'creates index.html' do
+      expect(chef_run).to create_file('/var/www/index.html')
+    end
+
   end
 end
