@@ -6,6 +6,7 @@
 
 include_recipe 'apt'
 
+
 httpd_service 'default' do
   action [:create, :start]
 end
@@ -15,7 +16,19 @@ httpd_config 'simple' do
   notifies :restart, 'httpd_service[default]'
 end
 
-file '/var/www/index.html' do
-  content 'Simple Web Page Delight!\n'
+directory '/var/www/css/' do
+  mode '0755'
   action :create
+end
+
+cookbook_file 'bootstrap.css' do
+  path '/var/www/css/bootstrap.css'
+  action :create_if_missing
+end
+
+template '/var/www/index.html' do
+  source 'index.html.erb'
+  variables({
+     :message => node["simple-web"]["message"],
+  })
 end
